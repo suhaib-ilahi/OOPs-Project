@@ -1,0 +1,26 @@
+{
+  "name": "quiz-app-fullstack",
+  "version": "1.0.0",
+  "description": "Full-stack quiz application with React frontend and Node.js backend",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd quiz-app-backend && npm run dev",
+    "dev:frontend": "cd quiz-app-frontend && npm run dev",
+    "build": "cd quiz-app-frontend && npm run build",
+    "start": "cd quiz-app-backend && npm start",
+    "install:all": "npm install && cd quiz-app-backend && npm install && cd ../quiz-app-frontend && npm install"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.15",
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "quiz",
+    "react",
+    "nodejs",
+    "express",
+    "fullstack"
+  ],
+  "author": "",
+  "license": "ISC"
+}
