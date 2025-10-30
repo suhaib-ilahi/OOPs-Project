@@ -4,7 +4,7 @@ import userController from "../controllers/UserController.js";
 const router = express.Router();
 
 router.post("/register", (req, res) => userController.registerUser(req, res));
-router.get("/", (req, res) => userController.getAllUsers(req, res));
-router.post("/attempt", (req, res) => userController.attemptQuiz(req, res));
+router.post("/login", (req, res) => userController.loginUser(req, res));
+router.post("/attempt/:title", (req, res) => userController.attemptQuiz(req, res));
 
 export default router;

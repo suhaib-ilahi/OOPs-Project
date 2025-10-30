@@ -4,6 +4,7 @@ dotenv.config();
 
 import express, { urlencoded } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser"
 
 
 import quizRoutes from "./routes/quiz.routes.js";
@@ -13,13 +14,12 @@ import db from "./database/db.js";
 const app = express();
 
 // ----- Middleware -----
-const CORS_ORIGINS = (process.env.CORS_ORIGINS || "http://localhost:3000,http://localhost:5173")
-  .split(",")
-  .map(s => s.trim());
-app.use(cors({ origin: CORS_ORIGINS, credentials: true }));
+console.log(process.env.CORS_ORIGINS);
+
+app.use(cors({ origin: process.env.CORS_ORIGINS, credentials: true }));
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
-
+app.use(cookieParser())
 
 // ----- Routes (mounted after body parsing) -----
 app.use("/api/v1/quizzes", quizRoutes);

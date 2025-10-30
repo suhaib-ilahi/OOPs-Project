@@ -9,25 +9,31 @@ class UserController {
     const { name, email, password } = req.body;
 
     // Check if already exists
-    const existingUser = this.users.find(u => u.email === email);
-    if (existingUser)
+    const existingUser = await User.find({email});
+    
+    if (existingUser.length > 0){
       return res.status(400).json({ message: "User already exists!" });
-
+}
     const newUser = await User.create({name, email, password});
   
     res.status(201).json({ message: "User registered successfully!", user: newUser });
   }
+
   async loginUser(req,res) {
-    const {email, password} = req.body;
+    const {email, password} = req.body;  
     if(!email || !password){
       throw new Error("Enter all the required fields")
     }
-    const user = await User.find(password);
+    const user = await User.findOne({password,email});
 
     if(!user){
       throw new Error("Something went wrong");
     }
 
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user._id
+  );
+  
     return res.json("User logged in successfully", "User :", user)
   }
 
@@ -44,7 +50,6 @@ class UserController {
 
     res.status(200).json({
       message: "Quiz attempted successfully!",
-      user: user.name,
       quiz: quiz.title,
       score,
     });
