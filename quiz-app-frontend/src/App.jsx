@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QuizProvider } from './contexts/QuizContext.jsx';
 import { UserProvider } from './contexts/UserContext.jsx';
@@ -6,6 +5,7 @@ import Home from './pages/Home.jsx';
 import CreateQuiz from './pages/CreateQuiz.jsx';
 import TakeQuiz from './pages/TakeQuiz.jsx';
 import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
 
 function App() {
   return (
@@ -17,7 +17,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/create-quiz" element={<CreateQuiz />} />
               <Route path="/quiz/:title" element={<TakeQuiz />} />
-              <Route path="/login" element={<Login />} />
+              {/* <Route path="/login" element={<Login />} /> */}
+              {/* <Route path="/register" element={<Register/>}/> */}
             </Routes>
           </div>
         </QuizProvider>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { useQuiz } from "../contexts/QuizContext.jsx";
-import { useUser } from "../contexts/UserContext.jsx";
+import { useQuiz } from "../contexts/useQuiz.js";
+import { useUser } from "../contexts/useUser.js";
 
 const TakeQuiz = () => {
   const { title } = useParams();
@@ -19,7 +18,7 @@ const TakeQuiz = () => {
     if (title) {
       fetchQuizByTitle(decodeURIComponent(title));
     }
-  }, [title, fetchQuizByTitle]);
+  },[title, fetchQuizByTitle]);
 
   const handleAnswerSelect = (questionIndex, answer) => {
     setAnswers({ ...answers, [questionIndex]: answer });
@@ -62,7 +61,7 @@ const TakeQuiz = () => {
 
   if (loading || !currentQuiz) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-white">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-indigo-50 to-white">
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-indigo-600"></div>
       </div>
     );
@@ -84,7 +83,7 @@ const TakeQuiz = () => {
 
   if (quizCompleted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-linear-to-br from-indigo-50 to-purple-50 flex items-center justify-center p-4">
         <motion.div
           className="bg-white rounded-xl shadow-xl p-8 max-w-md w-full text-center"
           initial={{ scale: 0.8, opacity: 0 }}
@@ -133,7 +132,7 @@ const TakeQuiz = () => {
   const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-white pb-8">
+    <div className="min-h-screen bg-linear-to-br from-indigo-50 to-white pb-8">
       {/* Header */}
       <header className="bg-white shadow-md sticky top-0 z-10 border-b">
         <div className="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">

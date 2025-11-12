@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import { useReducer } from 'react';
 import { userService } from '../services/userService.js';
+import { UserContext } from './useUser.js';
 
-const UserContext = createContext();
 
 const initialState = {
   currentUser: null,
@@ -21,8 +21,6 @@ const userReducer = (state, action) => {
       return { ...state, error: null };
     case 'SET_CURRENT_USER':
       return { ...state, currentUser: action.payload, loading: false };
-    case 'SET_USERS':
-      return { ...state, users: action.payload, loading: false };
     case 'ADD_QUIZ_ATTEMPT':
       return {
         ...state,
@@ -55,17 +53,6 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const fetchUsers = async () => {
-    try {
-      dispatch({ type: 'SET_LOADING', payload: true });
-      dispatch({ type: 'CLEAR_ERROR' });
-      const users = await userService.getAllUsers();
-      dispatch({ type: 'SET_USERS', payload: users });
-    } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: error.message });
-    }
-  };
-
   const attemptQuiz = async (attemptData) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
@@ -79,11 +66,21 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const login = (userData) => {
-    dispatch({ type: 'SET_CURRENT_USER', payload: userData });
+  const loginUser =async (userData) => {
+   try {
+     dispatch({ type: 'SET_LOADING', payload: true });
+     dispatch({ type: 'CLEAR_ERROR' });
+     const response = await userService.loginUser(userData);
+ 
+     dispatch({ type: 'SET_CURRENT_USER', payload: response.user });
+     return response.user;
+   } catch (error) {
+      dispatch({ type: 'SET_ERROR', payload: error.message });
+      throw error;
+   }
   };
 
-  const logout = () => {
+  const logoutUser = () => {
     dispatch({ type: 'LOGOUT' });
   };
 
@@ -94,10 +91,9 @@ export const UserProvider = ({ children }) => {
   const value = {
     ...state,
     registerUser,
-    fetchUsers,
     attemptQuiz,
-    login,
-    logout,
+    loginUser,
+    logoutUser,
     clearError,
   };
 
@@ -108,10 +104,3 @@ export const UserProvider = ({ children }) => {
   );
 };
 
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
-  }
-  return context;
-};

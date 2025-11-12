@@ -2,16 +2,15 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '../contexts/useUser.js';
 
-
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
-  const { loginUser, loading, error, clearError } = useUser();
+  const { registerUser, loading, error, clearError } = useUser();
 
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
   });
-
 
   const handleChange = (e) => {
     setFormData({
@@ -20,7 +19,7 @@ const Login = () => {
     });
   };
 
-  const handleSubmitLogin = async (e) => {
+  const handleSubmitRegister = async (e) => {
     e.preventDefault();
     clearError();
 
@@ -29,16 +28,22 @@ const Login = () => {
       return;
     }
 
+    if (!formData.name.trim()) {
+      alert('Please enter your name');
+      return;
+    }
+
     try {
-      await loginUser({
+      await registerUser({
+        name: formData.name,
         email: formData.email,
         password: formData.password,
       });
-      alert('Logged in successfully!');
+      alert('Registration successful!');
       navigate('/');
     } catch (err) {
-      console.error('Login error:', err);
-      // error is managed by context and shown in UI
+      console.error('Registration error:', err);
+      // error shown from context
     }
   };
 
@@ -46,8 +51,8 @@ const Login = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Welcome Back</h2>
-          <p className="mt-2 text-sm text-gray-600">Sign in to your account</p>
+          <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
+          <p className="mt-2 text-sm text-gray-600">Join us to create and take quizzes</p>
         </div>
       </div>
 
@@ -67,7 +72,25 @@ const Login = () => {
             </div>
           )}
 
-          <form className="space-y-6" onSubmit={handleSubmitLogin}>
+          <form className="space-y-6" onSubmit={handleSubmitRegister}>
+            {/* Name field */}
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                Full Name
+              </label>
+              <div className="mt-1">
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="input-field"
+                  placeholder="Enter your full name"
+                />
+              </div>
+            </div>
+
             {/* Email field */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -116,16 +139,16 @@ const Login = () => {
                 {loading ? (
                   <div className="flex items-center justify-center">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Signing in...
+                    Creating account...
                   </div>
                 ) : (
-                  'Sign In'
+                  'Create Account'
                 )}
               </button>
             </div>
           </form>
 
-          {/* Switch to register */}
+          {/* Switch to login */}
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -138,10 +161,10 @@ const Login = () => {
 
             <div className="mt-6 text-center">
               <Link
-                to="/register"
+                to="/login"
                 className="text-primary-600 hover:text-primary-500 text-sm font-medium"
               >
-                Don't have an account? Sign up
+                Already have an account? Sign in
               </Link>
             </div>
           </div>
@@ -157,4 +180,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

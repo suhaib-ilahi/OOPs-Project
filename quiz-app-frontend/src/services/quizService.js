@@ -4,7 +4,7 @@ export const quizService = {
   // Get all quizzes
   getAllQuizzes: async () => {
     try {
-      const response = await api.get('/quizzes');
+      const response = await api.get('v1/quizzes');
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Failed to fetch quizzes');
@@ -14,7 +14,7 @@ export const quizService = {
   // Get quiz by title
   getQuizByTitle: async (title) => {
     try {
-      const response = await api.get(`/quizzes/${title}`);
+      const response = await api.get(`v1/quizzes/${title}`);
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Failed to fetch quiz');
@@ -24,7 +24,7 @@ export const quizService = {
   // Create a new quiz
   createQuiz: async (quizData) => {
     try {
-      const response = await api.post('/quizzes/create', quizData);
+      const response = await api.post('v1/quizzes/create-quiz', quizData);
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Failed to create quiz');
@@ -32,9 +32,9 @@ export const quizService = {
   },
 
   // Add question to quiz
-  addQuestion: async (questionData) => {
+  addQuestion: async (questionDataq) => {
     try {
-      const response = await api.post('/quizzes/add-question', questionData);
+      const response = await api.post(`/quizzes/${questionData.quizTitle}/add-question`, questionData);
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Failed to add question');

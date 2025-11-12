@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useQuiz } from "../contexts/QuizContext.jsx";
-import { useUser } from "../contexts/UserContext.jsx";
+import { useQuiz } from "../contexts/useQuiz.js";
+import { useUser } from "../contexts/useUser.js";
 import QuizCard from "../components/QuizCard.jsx";
+import {motion} from "framer-motion"
 
 const Home = () => {
   const { quizzes, loading, error } = useQuiz();
@@ -10,14 +11,14 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-white">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-indigo-100 to-white">
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-indigo-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-linear-to-br from-indigo-50 via-white to-purple-50">
       {/* Header */}
       <header className="backdrop-blur-md bg-white/60 border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -42,12 +43,13 @@ const Home = () => {
                 </Link>
               </div>
             ) : (
-              <Link
-                to="/login"
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition"
-              >
-                Login / Register
-              </Link>
+              <div className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition">Hello, User!</div>
+              // <Link
+              //   to="/login"
+              //   className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition"
+              // >
+              //   Login / Register
+              // </Link>
             )}
           </div>
         </div>
@@ -68,12 +70,12 @@ const Home = () => {
           >
             Create Quiz
           </Link>
-          <a
-            href="#quizzes"
+          <Link
+            to="/quizzes"
             className="px-6 py-3 rounded-lg bg-white border border-gray-200 text-indigo-700 text-lg font-medium shadow hover:shadow-md transition"
           >
             Browse Quizzes
-          </a>
+          </Link>
         </div>
       </section>
 

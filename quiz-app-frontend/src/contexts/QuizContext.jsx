@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, {  useReducer, useEffect, useCallback } from 'react';
 import { quizService } from '../services/quizService.js';
+import { QuizContext } from './useQuiz.js';
 
-const QuizContext = createContext();
+
 
 const initialState = {
   quizzes: [],
@@ -51,7 +52,7 @@ export const QuizProvider = ({ children }) => {
     }
   };
 
-  const fetchQuizByTitle = async (title) => {
+  const fetchQuizByTitle = useCallback(async (title) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'CLEAR_ERROR' });
@@ -62,7 +63,7 @@ export const QuizProvider = ({ children }) => {
       dispatch({ type: 'SET_ERROR', payload: error.message });
       throw error;
     }
-  };
+  },[]);
 
   const createQuiz = async (quizData) => {
     try {
@@ -119,10 +120,4 @@ export const QuizProvider = ({ children }) => {
   );
 };
 
-export const useQuiz = () => {
-  const context = useContext(QuizContext);
-  if (!context) {
-    throw new Error('useQuiz must be used within a QuizProvider');
-  }
-  return context;
-};
+
