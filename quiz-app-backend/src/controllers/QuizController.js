@@ -9,7 +9,7 @@ class QuizController {
       if (!title || !creator) {
         return res.status(400).json({ message: "Both 'title' and 'creator' are required." });
       }
-
+      console.log(req.body);
       const quiz = await QuizService.createQuiz(title, creator);
       return res.status(201).json({ message: "Quiz created successfully!", quiz });
     } catch (err) {

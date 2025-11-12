@@ -10,7 +10,7 @@ router.post("/create-quiz", asyncHandler(quizController.createQuiz.bind(quizCont
 
 // add question to quiz (use :title route param):tested
 router.post(
-  "/:title/questions",
+  "/:title/add-questions",
   asyncHandler(quizController.addQuestion.bind(quizController))
 );
 

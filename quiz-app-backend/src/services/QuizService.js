@@ -8,43 +8,23 @@ class QuizService {
     if (!title || typeof title !== "string") throw new Error("Invalid title");
     if (!creator || typeof creator !== "string") throw new Error("Invalid creator");
 
-    const existing = await Quiz.findOne({ title }).lean();
-    if (existing) throw new Error("Quiz title already exists");
+    // const existing = await Quiz.findOne({ title }).lean();
+    // if (existing) throw new Error("Quiz title already exists");
 
     const quiz = await Quiz.create({ title, creator, questions: [] });
     return quiz;
   }
-
   async addQuestion(quizTitle, text, options, correctOption) {
-    if (!quizTitle || typeof quizTitle !== "string") throw new Error("Invalid quizTitle");
-    if (!text || typeof text !== "string") throw new Error("Invalid text");
-    if (!Array.isArray(options) || options.length < 2) throw new Error("options must be an array of at least two items");
-    if (!correctOption || typeof correctOption !== "string") throw new Error("Invalid correctOption");
-    if (!options.includes(correctOption)) throw new Error("correctOption must be one of options");
+  const quiz = await Quiz.findOne({ title: quizTitle });
+  if (!quiz) throw new Error("Quiz not found");
 
-    const session = await mongoose.startSession();
-    try {
-      let populatedQuiz;
-      await session.withTransaction(async () => {
-        const quiz = await Quiz.findOne({ title: quizTitle }).session(session);
-        if (!quiz) throw new Error("Quiz not found");
+  const question = await Question.create({ text, options, correctOption });
+  quiz.questions.push(question._id);
+  await quiz.save();
 
-        const [question] = await Question.create(
-          [{ text, options, correctOption }],
-          { session }
-        );
+  return await Quiz.findById(quiz._id).populate("questions");
+}
 
-        quiz.questions.push(question._id);
-        await quiz.save({ session });
-
-        populatedQuiz = await Quiz.findById(quiz._id).populate("questions").session(session);
-      });
-
-      return populatedQuiz;
-    } finally {
-      session.endSession();
-    }
-  }
 
   async getAllQuizzes() {
     return await Quiz.find().populate("questions").lean();
@@ -93,6 +73,8 @@ class QuizService {
       session.endSession();
     }
   }
+
+  
 }
 
 export default new QuizService();

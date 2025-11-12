@@ -24,7 +24,7 @@ class UserController {
     if(!email || !password){
       throw new Error("Enter all the required fields")
     }
-    const user = await User.findOne({password,email});
+    const user = await User.findOne({password, email});
 
     if(!user){
       throw new Error("Something went wrong");
